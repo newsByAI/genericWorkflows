@@ -31,10 +31,17 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-test.txt
 
+      - name: Write GCP Credentials
+        id: gcp-auth
+        run: |
+          cat > /tmp/gcp-credentials.json <<EOF
+          ${{ secrets.GCP_SA_IA_CREDENTIALS }}
+          EOF
+
       - id: "auth"
         uses: "google-github-actions/auth@v2"
         with:
-          credentials_json: ${{ secrets.GCP_SA_IA_CREDENTIALS }}
+          credentials_json: /tmp/gcp-credentials.json
           
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v2"
@@ -49,7 +56,4 @@ jobs:
           VERTEX_ENDPOINT_ID: ${{ vars.VERTEX_ENDPOINT_ID }}
           DEPLOYED_INDEX_ID: ${{ vars.DEPLOYED_INDEX_ID }}
         run: |
-          # Use printf to write the secret content directly to the file without extra formatting
-          printf '%s' "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp_creds.json
-          
           pytest
