@@ -19,7 +19,21 @@ jobs:
     steps:
       - name: Checkout code     
         uses: actions/checkout@v4
-
+      - name: Write GCP Credentials
+        id: gcp-auth
+        run: |
+          printf '%s' "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp-creds.json
+      - run: cat /tmp/gcp-creds.json
+        if: always()
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: ${{ secrets.GCP_SA_IA_CREDENTIALS }}
+          
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v2"
+        with:
+          project_id: "${{ secrets.GCP_PROJECT_ENUBE }}"        
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -31,20 +45,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-test.txt
 
-      - name: Write GCP Credentials
-        id: gcp-auth
-        run: |
-          printf '%s' "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp-creds.json
 
-      - id: "auth"
-        uses: "google-github-actions/auth@v2"
-        with:
-          credentials_json: /tmp/gcp-credentials.json
-          
-      - name: "Set up Cloud SDK"
-        uses: "google-github-actions/setup-gcloud@v2"
-        with:
-          project_id: "${{ secrets.GCP_PROJECT_ENUBE }}"
       - name: Run tests with pytest
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_creds.json
