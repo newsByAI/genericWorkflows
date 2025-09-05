@@ -5,7 +5,7 @@ on:
     secrets:
       GCP_SA_REGISTRY_MANAGER_CREDENTIALS:
         required: true
-      GCP_PROJECT:
+      GCP_PROJECT_ENUBE:
         required: true
     inputs:
       IMAGE_NAME:
