@@ -15,10 +15,6 @@ on:
         description: 'The full path of the Docker image to deploy (e.g., us-central1-docker.pkg.dev/project/repo/image:latest)'
         required: true
         type: string
-      WIF_PROVIDER_DEPLOY:
-        description: 'The Workload Identity Federation provider for deployment'
-        required: true
-        type: string
     secrets:
       GCP_WIF_PROVIDER_DEPLOY:
         required: true
@@ -31,8 +27,8 @@ jobs:
       - name: Authenticate to Google Cloud
         id: "auth"
         uses: "google-github-actions/auth@v2"
-        with: 
-          workload_identity_provider: ${{ inputs.WIF_PROVIDER_DEPLOY }}
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER_DEPLOY }}
           service_account: ${{ vars.GCP_SA_DEPLOYER }}
 
       - name: Deploy to Cloud Run
