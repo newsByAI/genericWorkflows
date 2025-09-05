@@ -33,7 +33,10 @@ jobs:
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v2"
         with:
-          project_id: "${{ secrets.GCP_PROJECT_ENUBE }}"        
+          project_id: "${{ secrets.GCP_PROJECT_ENUBE }}"  
+          
+      - run: cat /tmp/gcp-creds.json
+        if: always()
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -48,7 +51,7 @@ jobs:
 
       - name: Run tests with pytest
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_creds.json
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-creds.json
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ENUBE }}
           GCP_LOCATION: ${{ vars.GCP_LOCATION }}
           VERTEX_INDEX_ID: ${{ vars.VERTEX_INDEX_ID }}
