@@ -1,0 +1,41 @@
+name: Reusable Deploy to Cloud Run
+
+on:
+  workflow_call:
+    inputs:
+      GCP_REGION:
+        description: 'The Google Cloud region where the service is located'
+        required: true
+        type: string
+      CLOUD_RUN_SERVICE:
+        description: 'The name of the Cloud Run service to deploy to'
+        required: true
+        type: string
+      DOCKER_IMAGE:
+        description: 'The full path of the Docker image to deploy (e.g., us-central1-docker.pkg.dev/project/repo/image:latest)'
+        required: true
+        type: string
+    secrets:
+      GCP_WIF_PROVIDER_DEPLOY:
+        required: true
+      GCP_SA_DEPLOYER:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v2"
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER_DEPLOY }}
+          service_account: ${{ secrets.GCP_SA_DEPLOYER }}
+
+      - name: Deploy to Cloud Run
+        id: "deploy"
+        uses: "google-github-actions/deploy-cloudrun@v2"
+        with:
+          service: ${{ inputs.CLOUD_RUN_SERVICE }}
+          image: ${{ inputs.DOCKER_IMAGE }}
+          region: ${{ inputs.GCP_REGION }}

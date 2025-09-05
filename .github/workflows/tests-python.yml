@@ -14,7 +14,6 @@ on:
 
 jobs:
   test:
-    # IMPORTANTE: Debes darle permisos al job para que pueda solicitar el token a GitHub
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -23,8 +22,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # 👇 El nuevo y único paso de autenticación
       - name: Authenticate to Google Cloud
         id: "auth"
         uses: "google-github-actions/auth@v2"
