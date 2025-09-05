@@ -34,9 +34,7 @@ jobs:
       - name: Write GCP Credentials
         id: gcp-auth
         run: |
-          cat > /tmp/gcp-credentials.json <<EOF
-          ${{ secrets.GCP_SA_IA_CREDENTIALS }}
-          EOF
+          printf '%s' "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp-creds.json
 
       - id: "auth"
         uses: "google-github-actions/auth@v2"
