@@ -18,8 +18,7 @@ on:
     secrets:
       GCP_WIF_PROVIDER_DEPLOY:
         required: true
-      GCP_SA_DEPLOYER:
-        required: true
+
 
 jobs:
   deploy:
@@ -30,7 +29,7 @@ jobs:
         uses: "google-github-actions/auth@v2"
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER_DEPLOY }}
-          service_account: ${{ secrets.GCP_SA_DEPLOYER }}
+          service_account: ${{ vars.GCP_SA_DEPLOYER }}
 
       - name: Deploy to Cloud Run
         id: "deploy"
