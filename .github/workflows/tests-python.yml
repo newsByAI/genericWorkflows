@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ inputs.PYTHON_VERSION }}
+          python-version: ${{ inputs.PYTHON-VERSION }}
           
       - name: Install dependencies
         run: |
@@ -44,5 +44,7 @@ jobs:
       - name: Run tests with pytest
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_IA_CREDENTIALS }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ENUBE }}
+          GCP_LOCATION: ${{ vars.GCP_LOCATION }}
         run: |
           pytest
