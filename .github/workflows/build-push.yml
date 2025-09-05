@@ -45,8 +45,7 @@ jobs:
         run: |
           echo "Building image with tags:"
           echo "Docker image name generated: ${{env.IMAGE_PATH}}:${{ env.IMAGE_TAG }}"
-          docker build -t ${{env.IMAGE_PATH}}:${{ env.IMAGE_TAG }} .
-          dockerbuild -t ${{env.IMAGE_PATH}}:latest .
+          docker build -t ${{env.IMAGE_PATH}}:${{ env.IMAGE_TAG }} -t ${{env.IMAGE_PATH}}:latest .
             
       - name: List Docker images
         run: |
