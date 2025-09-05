@@ -8,7 +8,7 @@ on:
       GCP_PROJECT_ENUBE:
         required: true
     inputs:
-      PYTHON-VERSION:
+      PYTHON_VERSION:
         type: string
         required: false
         default: '3.11'
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ inputs.PYTHON-VERSION }}
+          python-version: ${{ inputs.PYTHON_VERSION }}
           
       - name: Install dependencies
         run: |
