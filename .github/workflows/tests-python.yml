@@ -40,18 +40,16 @@ jobs:
         uses: "google-github-actions/setup-gcloud@v2"
         with:
           project_id: "${{ secrets.GCP_PROJECT_ENUBE }}"
-          
       - name: Run tests with pytest
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_creds.json
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ENUBE }}
           GCP_LOCATION: ${{ vars.GCP_LOCATION }}
           VERTEX_INDEX_ID: ${{ vars.VERTEX_INDEX_ID }}
           VERTEX_ENDPOINT_ID: ${{ vars.VERTEX_ENDPOINT_ID }}
           DEPLOYED_INDEX_ID: ${{ vars.DEPLOYED_INDEX_ID }}
         run: |
-          # Create a temporary file for the credentials
-          echo "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp_creds.json
-          # Set the environment variable to the file path
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp_creds.json
-          # Run your tests
+          # Use printf to write the secret content directly to the file without extra formatting
+          printf '%s' "${{ secrets.GCP_SA_IA_CREDENTIALS }}" > /tmp/gcp_creds.json
+          
           pytest
